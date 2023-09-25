@@ -4,12 +4,12 @@ set -Eeuo pipefail
 # Docker environment variables
 
 : ${BOOT:=''}           # URL of the ISO file
-: ${DEBUG:='N'}         # Enable debug mode
-: ${ALLOCATE:='Y'}      # Preallocate diskspace
+: ${DEBUG:='Y'}         # Enable debug mode
+: ${ALLOCATE:='N'}      # Preallocate diskspace
 : ${ARGUMENTS:=''}      # Extra QEMU parameters
 : ${CPU_CORES:='1'}     # Amount of CPU cores
-: ${DISK_SIZE:='16G'}   # Initial data disk size
-: ${RAM_SIZE:='512M'}   # Maximum RAM amount
+: ${DISK_SIZE:='32G'}   # Initial data disk size
+: ${RAM_SIZE:='4096M'}   # Maximum RAM amount
 
 echo "❯ Starting QEMU for Docker v${VERSION}..."
 
@@ -23,8 +23,8 @@ trap 'error "Status $? while: ${BASH_COMMAND} (line $LINENO/$BASH_LINENO)"' ERR
 STORAGE="/storage"
 KERNEL=$(uname -r | cut -b 1)
 MINOR=$(uname -r | cut -d '.' -f2)
-ARCH=$(dpkg --print-architecture)
-VERS=$(qemu-system-x86_64 --version | head -n 1 | cut -d '(' -f 1)
+ARCH=amd64
+VERS=$(/usr/libexec/qemu-kvm --version | head -n 1 | cut -d '(' -f 1)
 
 [ ! -d "$STORAGE" ] && error "Storage folder (${STORAGE}) not found!" && exit 13
 
@@ -71,5 +71,7 @@ ARGS=$(echo "$ARGS" | sed 's/\t/ /g' | tr -s ' ')
 trap - ERR
 
 [[ "${DEBUG}" == [Yy1]* ]] && info "$VERS" && set -x
-exec qemu-system-x86_64 ${ARGS:+ $ARGS}
+exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/vm/QNX70_i440FX_Test-1.qcow2 -net nic,model=virtio 
+
+#exec qemu-system-x86_64 ${ARGS:+ $ARGS}
 { set +x; } 2>/dev/null

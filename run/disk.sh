@@ -120,6 +120,7 @@ if [[ SIZE -ne DATA_SIZE ]]; then
   error "Virtual disk has the wrong size: ${SIZE}" && exit 89
 fi
 
+echo "drive file is "$BOOT
 DISK_OPTS="\
     -drive id=cdrom0,if=none,format=raw,readonly=on,file=${BOOT} \
     -device virtio-scsi-pci,id=scsi0 \
