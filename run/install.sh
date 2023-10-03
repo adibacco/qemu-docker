@@ -31,7 +31,7 @@ if [[ ${BOOT} == 'http'* ]]; then
 else
   info "Copying file ${BOOT} as boot image..."
 
-  cp $BOOT $TMP
+  ln -s $BOOT $TMP
 #  { sshpass -p 'user' scp -o StrictHostKeyChecking=no "$BOOT" "$TMP" ; rc=$?; } || :
 
 #  (( rc != 0 )) && error "Failed to transfer ${BOOT}, reason: $rc" && exit 60

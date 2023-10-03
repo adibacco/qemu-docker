@@ -119,7 +119,7 @@ configureNAT () {
 
   # Create a bridge with a static IP for the VM guest
 
-  VM_NET_IP='20.20.20.21'
+  VM_NET_IP='192.168.100.21'
   [[ "${DEBUG}" == [Yy1]* ]] && set -x
 
   { ip link add dev dockerbridge type bridge ; rc=$?; } || :
@@ -195,6 +195,11 @@ closeNetwork () {
   fi
 }
 
+NET_OPTS=""
+
+return
+
+
 # ######################################
 #  Configure Network
 # ######################################
@@ -207,6 +212,8 @@ if [ ! -c /dev/net/tun ]; then
 fi
 
 [ ! -c /dev/net/tun ] && error "TUN network interface not available..." && exit 85
+
+
 
 # Create the necessary file structure for /dev/vhost-net
 if [ ! -c /dev/vhost-net ]; then

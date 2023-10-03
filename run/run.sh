@@ -9,7 +9,7 @@ set -Eeuo pipefail
 : ${ARGUMENTS:=''}      # Extra QEMU parameters
 : ${CPU_CORES:='1'}     # Amount of CPU cores
 : ${DISK_SIZE:='32G'}   # Initial data disk size
-: ${RAM_SIZE:='4096M'}   # Maximum RAM amount
+: ${RAM_SIZE:='4G'}   # Maximum RAM amount
 
 echo "❯ Starting QEMU for Docker v${VERSION}..."
 
@@ -71,7 +71,10 @@ ARGS=$(echo "$ARGS" | sed 's/\t/ /g' | tr -s ' ')
 trap - ERR
 
 [[ "${DEBUG}" == [Yy1]* ]] && info "$VERS" && set -x
-exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/vm/QNX70_i440FX_Test-1.qcow2 -net nic,model=virtio 
+#exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=QemuTap0,id=net0,script=no -device e1000,netdev=net0 -device vfio-pci,host=18:00.0 -serial mon:stdio 
+exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=QemuTap0,id=net0,script=no -device e1000,netdev=net0 -netdev tap,ifname=QemuTap1,id=net1,script=no -device e1000,netdev=net1 -serial mon:stdio 
+
+#exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,id=net0,ifname=eth0,script=no -device e1000,netdev=net0  -serial mon:stdio 
 
 #exec qemu-system-x86_64 ${ARGS:+ $ARGS}
 { set +x; } 2>/dev/null
