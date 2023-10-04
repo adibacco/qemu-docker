@@ -71,8 +71,13 @@ ARGS=$(echo "$ARGS" | sed 's/\t/ /g' | tr -s ' ')
 trap - ERR
 
 [[ "${DEBUG}" == [Yy1]* ]] && info "$VERS" && set -x
-#exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=QemuTap0,id=net0,script=no -device e1000,netdev=net0 -device vfio-pci,host=18:00.0 -serial mon:stdio 
-exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=QemuTap0,id=net0,script=no -device e1000,netdev=net0 -netdev tap,ifname=QemuTap1,id=net1,script=no -device e1000,netdev=net1 -serial mon:stdio 
+#exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=mytap00,id=net0,script=no -device e1000,netdev=net0 -device vfio-pci,host=18:00.0 -serial mon:stdio 
+exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=mytap00,id=net0,script=no -device e1000,netdev=net0 -device virtio-net-pci,addr=18:00.0 -serial mon:stdio 
+#exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/user/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,ifname=mytap00,id=net0,script=no -device e1000,netdev=net0 -netdev tap,ifname=mytap10,id=net1,script=no -device e1000,netdev=net1 -serial mon:stdio 
+
+
+-net nic,model=virtio,macaddr=$(cat /sys/class/net/macvtap0/address) -net tap,fd=3 3<>/dev/tap$(cat /sys/class/net/macvtap0/ifindex),script=no,downscript=no
+
 
 #exec /usr/libexec/qemu-kvm -enable-kvm -m 4G -smp 2 -hda /home/vm/QNX70_i440FX_Test-1.qcow2 -netdev tap,id=net0,ifname=eth0,script=no -device e1000,netdev=net0  -serial mon:stdio 
 
