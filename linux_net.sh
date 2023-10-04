@@ -27,4 +27,6 @@ sudo brctl addif mybr1 mytap11
 sudo ip link add link ens1f0 name macvtap0 type macvtap mode bridge
 sudo ip link set dev macvtap0 up
 
+cat /sys/class/net/macvtap0/address
+cat /sys/class/net/macvtap0/index
 
