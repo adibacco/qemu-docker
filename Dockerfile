@@ -69,6 +69,6 @@ ENTRYPOINT ["/run/run.sh"]
 # docker run -it --rm --device=/dev/kvm --network host --name qemu-qnx --privileged --cap-add NET_ADMIN -v /home/user/vm:/home/user/vm qemu-qnx-docker-rocky 
 # docker exec -it qemu-qnx /bin/bash
 
-# docker run -it --rm --device=/dev/kvm --name qemu-qnx --privileged -v /var/run/libvirt:/var/run/libvirt -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /home/vm:/home/vm qemu-qnx-docker-rocky 
+# OLD docker run -it --rm --device=/dev/kvm --name qemu-qnx --privileged -v /var/run/libvirt:/var/run/libvirt -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /home/vm:/home/vm qemu-qnx-docker-rocky 
 
 
